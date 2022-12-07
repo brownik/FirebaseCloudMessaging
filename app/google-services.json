@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "848999759149",
+    "project_id": "fcmpush-ea848",
+    "storage_bucket": "fcmpush-ea848.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848999759149:android:593d27088808f1f19a27a4",
+        "android_client_info": {
+          "package_name": "com.brownik.firebasecloudmessaging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "848999759149-c0q0lg408f03bi2vm1fifrf0v6r9nmfq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNQGNgkq4QuyLjulafvPmLjbByxLhexQ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "848999759149-c0q0lg408f03bi2vm1fifrf0v6r9nmfq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
