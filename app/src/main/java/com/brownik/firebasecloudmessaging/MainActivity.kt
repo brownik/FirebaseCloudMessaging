@@ -3,9 +3,12 @@ package com.brownik.firebasecloudmessaging
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.brownik.firebasecloudmessaging.databinding.ActivityMainBinding
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,20 +20,38 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         messagingService
+
+        addOnClickListener()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    private fun addOnClickListener() = with(binding) {
+        sendButton.setOnClickListener {
+            getToken()
+                .onEach { token ->
+                    val message = MessageData(token, MessageData.MessageInfo(
+                        messageTitle.text.toString(),
+                        messageContent.text.toString()
+                    ))
+                    sendMessage(message)
+                }
+                .catch { Log.d("qwe123", "getToken().catch: ${it.message}") }
+                .launchIn(CoroutineScope(Dispatchers.Main))
+        }
     }
 
     @SuppressLint("ResourceType")
-    private fun getToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if(!task.isSuccessful) {
-                return@OnCompleteListener
-            }
+    private fun getToken(): Flow<String> = flow {
+        var token = ""
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                token = task.result
+            })
+        }
+        job.join()
+        emit(token)
+    }
 
-            val token = task.result
-        })
+    private suspend fun sendMessage(message: MessageData) {
+        RetrofitInstance.api.sendMessage(message)
     }
 }
